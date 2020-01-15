@@ -1,4 +1,4 @@
-import { signUp,} from '../services/applicantService';
+import { signUp, login} from '../services/userService';
 
 //Define user sign up
 export const userSignUp = async (req, res) => {
@@ -16,4 +16,13 @@ export const userSignUp = async (req, res) => {
       console.error(`Error: ${exception}`);
     }
 };
-  
+
+//Define applicant login
+export const applicantLogin = async (req, res) => {
+    try {
+      const userLogin = await login(req, res);
+      return userLogin;
+    } catch (exception) {
+      console.error(`Error: ${exception}`);
+    }
+  };

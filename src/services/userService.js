@@ -39,4 +39,51 @@ export const signUp = async (req, res, data) => {
       throw new Error(`Error: ${exception}`);
     }
 };
-  
+
+//Define applicant login
+const isValidPassword = (user, password) => bcrypt.compare(password, user.password);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  applicant.findById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+export const login = async (req, res) => {
+  passport.authenticate('login', {
+    successRedirect: '/users',
+    failureRedirect: '/login',
+  });
+  try {
+    passport.use('login', new Strategy(
+      await applicant.findOne({ email: req.body.email }, (err, user) => {
+        if (!user) {
+          return res.status(500).json({ message: 'You haven\'t registered your account' });
+        }
+        if (user.verified === true) {
+          if (user && isValidPassword(user, req.body.password)) {
+            const token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY, { expiresIn: 86400 });
+            res.status(200).json({
+              userId: user._id, email: user.email, token, message: 'Login successful.',
+            });
+          } else {
+            res.status(400).json({ message: 'Incorrect email or password.' });
+          }
+        } else {
+          res.status(400).json({ message: 'you have not been verified' });
+        }
+      }),
+      (err) => {
+        if (err) {
+          res.status(400).json({ message: 'create an account' });
+        }
+      },
+    ));
+  } catch (exception) {
+    console.log(exception);
+  }
+};
