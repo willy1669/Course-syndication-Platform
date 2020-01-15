@@ -64,18 +64,14 @@ export const login = async (req, res) => {
         if (!user) {
           return res.status(500).json({ message: 'You haven\'t registered your account' });
         }
-        if (user.verified === true) {
-          if (user && isValidPassword(user, req.body.password)) {
-            const token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY, { expiresIn: 86400 });
-            res.status(200).json({
-              userId: user._id, email: user.email, token, message: 'Login successful.',
-            });
-          } else {
+        if (user && isValidPassword(user, req.body.password)) {
+          const token = jwt.sign({ email: user.email, id: user._id }, process.env.SECRET_KEY, { expiresIn: 86400 });
+          res.status(202).json({
+            userId: user._id, email: user.email, token, message: 'Login successful.',
+          });
+        } else {
             res.status(400).json({ message: 'Incorrect email or password.' });
           }
-        } else {
-          res.status(400).json({ message: 'you have not been verified' });
-        }
       }),
       (err) => {
         if (err) {
