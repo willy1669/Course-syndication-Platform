@@ -18,8 +18,22 @@ const userSchema = new Schema({
     type: String,
   },
   courses: [{
-    type: ObjectId,
-    ref: 'Course',
+    courseId: {
+      type: ObjectId,
+      ref: 'Course',
+    },
+    numberOfTimesRequested: {
+      type: Number,
+    },
+    timeOfDay: {
+      type: Date
+    },
+    daysOfTheWeek: [{
+      type: String,
+    }],
+    timeZone: {
+      type: String
+    }
   }],
   countryCode: {
     type: String,
