@@ -2,8 +2,7 @@
   "name": "course-syndication-platform",
   "version": "1.0.0",
   "description": "A platform to take courses",
-  "main": "server.js",
-  "type": "module",
+  "main": "app.js",
   "scripts": {
     "devstart": "nodemon -r esm ./src/esmmodule.js",
     "start": "npm run security-check && npm run build && npm run chip ",
@@ -31,14 +30,16 @@
     "@babel/preset-env": "^7.8.3",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
-    "chalk": "^3.0.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "mongoose": "^5.8.7",
+    "preset": "^1.0.0",
     "twilio": "^3.39.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-async-to-generator": "^7.8.3",
     "babel-register": "^6.26.0",
+    "chalk": "^3.0.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
     "nodemon": "^2.0.2"
