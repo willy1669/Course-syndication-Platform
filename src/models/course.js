@@ -10,7 +10,7 @@ const courseSchema = new Schema({
     duration: {
         type: String,
     },
-    courseModule: [{
+    courseModules: [{
         type: ObjectId,
         ref: 'CourseModule',
     }],
