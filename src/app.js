@@ -1,11 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyparser from 'body-parser';
+import chalk from 'chalk';
 
 const app = express();
 
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Welcome to course syndication platform!' });
+  res.status(200).json({ message: 'Welcome to course syndication platform!' });
 });
 
 mongoose.set('useCreateIndex', true);
