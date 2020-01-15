@@ -40,7 +40,7 @@ export const signUp = async (req, res, data) => {
     }
 };
 
-//Define applicant login
+//Define user login
 const isValidPassword = (user, password) => bcrypt.compare(password, user.password);
 
 passport.serializeUser((user, done) => {

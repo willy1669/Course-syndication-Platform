@@ -17,8 +17,8 @@ export const userSignUp = async (req, res) => {
     }
 };
 
-//Define applicant login
-export const applicantLogin = async (req, res) => {
+//Define user login
+export const userLogin = async (req, res) => {
     try {
       const userLogin = await login(req, res);
       return userLogin;
