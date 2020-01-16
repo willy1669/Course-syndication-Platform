@@ -17,5 +17,6 @@ const courseSchema = new Schema({
 });
 
 const Course = mongoose.model('Course', courseSchema);
+Course.createIndex({ 'courseTitle': 1});
 
 export default Course;
