@@ -1,0 +1,55 @@
+{
+  "name": "course-syndication-platform",
+  "version": "1.0.0",
+  "description": "A platform to take courses",
+  "main": "app.js",
+  "scripts": {
+    "devstart": "nodemon -r esm ./src/esmmodule.js",
+    "start": "npm run security-check && npm run build && npm run chip ",
+    "security-check": "npm audit",
+    "chip": "node -r esm ./build/esmmodule.js",
+    "clean": "rm -rf build && mkdir build",
+    "babel-build": "babel -d ./build ./src -s",
+    "build": "npm run clean && npm run babel-build",
+    "lint": "eslint app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willy1669/Course-syndication-Platform.git"
+  },
+  "author": "Chinonso Williams",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/willy1669/Course-syndication-Platform/issues"
+  },
+  "homepage": "https://github.com/willy1669/Course-syndication-Platform#readme",
+  "dependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/polyfill": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "env": "0.0.2",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
+    "mongoose": "^5.8.7",
+    "node-schedule-tz": "^1.2.1-4",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "preset": "^1.0.0",
+    "twilio": "^3.39.2"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-async-to-generator": "^7.8.3",
+    "babel-register": "^6.26.0",
+    "chalk": "^3.0.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.0",
+    "nodemon": "^2.0.2"
+  }
+}
