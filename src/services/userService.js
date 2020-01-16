@@ -3,11 +3,13 @@ import bcrypt from 'bcrypt';
 import Joi from 'joi';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
-import { RecurrenceRule } from 'node-schedule-tz'
 import moment from 'moment'
 import { Strategy } from 'passport-local';
 import user from '../models/user';
-import twilioService from '../config/twilioService'
+import course from '../models/course';
+import courseModule from '../models/courseModule';
+import { scheduleTask } from '../config/scheduleMessage';
+import { sendMessage } from '../config/twilioService';
 
 //Define schema for validating user input
 const schema = Joi.object().keys({
@@ -93,19 +95,56 @@ export const login = async (req, res) => {
   }
 };
 
-export const userSignUpForCourse = async (req, res, userId, courseDetails) => {
-  const { timeZones, numberOfRequest, time, daysOfTheWeek  } = req.body;
+export const getAllCoursesForAUser = async (userId, courseId) => {
+  const userResult = await user.findOne({_id: userId });
+  if (!userResult) {
+    return { message: 'You haven\'t registered your account' };
+  } else {
+  userResult.courses.forEach(async (userCourse) => {
+    if (courseId === userCourse._id) {
+      const courseResult = await course.findOne({ _id: courseModule._id});
+      return courseResult;
+    }
+  })
+}
+
+const getAllCourseModuleTextForACourse = async (courseId) => {
+  const newCourseModuleText = [];
+  const courseResult = await course.findOne({_id: courseId });
+  if (!courseResult) {
+    return { message: 'no course found' };
+  } 
+  else {
+    courseResult.courseModules.forEach(async (resultModule) => {
+      const courseModuleResult = await courseModule.findOne({ _id: resultModule._id});
+      newCourseModuleText.push(courseModuleResult.courseModulebody);
+    });
+    return newCourseModuleText;
+  }
+};
+
+const sendCourseModuleIndividually = async (user) => {
+  let result = getAllCourseModuleTextForACourse.forEach(async (text) => {
+    sendMessage(user.phoneNumber, text);
+  });
+  return result;
+}
+
+export const userSignUpForACourse = async (req, res, userId, courseDetails) => {
+  const { timeZones, numberOfRequest, daysOfTheWeek  } = req.body;
+  const time = moment(req.body.time, 'MM-DD-YYYY hh:mma');
   const daysOfTheWeek  = req.body.daysOfTheWeek.split(',');
   const userResult = await user.findOne({_id: userId });
   if (!userResult) {
     return res.status(402).json({ message: 'You haven\'t registered your account' });
   } else {
-    const courseResult = await courseResult.findOne({ courseTitle: courseDetails});
+    const courseResult = await course.findOne({ courseTitle: courseDetails});
     if (!courseResult) {
       return res.status(402).json({ message: 'course doesn\'t exist'});
     } else {
       user.findOneAndUpdate({ _id: userResult._id}, {$push: {'courses': {courseId: courseResult._id, timeZone: timeZones, numberOfTimesRequested: numberOfRequest, time: time, daysOfTheWeek: daysOfTheWeek }}}, {safe: true, upsert: true});
       await user.save();
+      scheduleTask({}, sendMessage(userResult.phoneNumber, getAllCourseModuleTextForACourse(courseResult)))
       res.status(202).json({ message: `${userResult.name} has signed for ${courseResult.courseTitle} successfully`})
     }
   }

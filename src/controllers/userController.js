@@ -1,4 +1,4 @@
-import { signUp, login, userSignUpForCourse} from '../services/userService';
+import { signUp, login, userSignUpForACourse} from '../services/userService';
 
 //Define user sign up
 export const userSignUp = async (req, res) => {
@@ -32,7 +32,7 @@ export const userLogin = async (req, res) => {
 export const userSignUpForACourse = async (req, res) => {
   try {
     const {userId, courseDetails } = req.params;
-    const result = await userSignUpForCourse(req, res, userId, courseDetails);
+    const result = await userSignUpForACourse(req, res, userId, courseDetails);
     return result;
   } catch (exception) {
     console.error(`Error: ${exception}`);

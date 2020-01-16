@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { sendMessage } from '../config/twilioService';
 
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
