@@ -144,8 +144,8 @@ export const userSignUpForACourse = async (req, res, userId, courseDetails) => {
     } else {
       user.findOneAndUpdate({ _id: userResult._id}, {$push: {'courses': {courseId: courseResult._id, timeZone: timeZones, numberOfTimesRequested: numberOfRequest, time: time, daysOfTheWeek: daysOfTheWeek }}}, {safe: true, upsert: true});
       await user.save();
-      scheduleTask({}, sendMessage(userResult.phoneNumber, getAllCourseModuleTextForACourse(courseResult)))
+      scheduleTask({dayOfWeek: daysOfTheWeek, time}, sendCourseModuleIndividually(userResult));
       res.status(202).json({ message: `${userResult.name} has signed for ${courseResult.courseTitle} successfully`})
     }
   }
-};
+}}
