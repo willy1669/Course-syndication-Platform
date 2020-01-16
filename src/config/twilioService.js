@@ -8,10 +8,11 @@ const client = require('twilio')(accountSid, authToken);
 
 
 export const sendMessage = async (recipientPhoneNumber, messageBody) => { 
-    return await client.messages
-    .create({
-       body: messageBody,
-       from: process.env.TWILIO_PHONE_NUMBER,
-       to: recipientPhoneNumber
-     }) 
+  const result = await client.messages
+  .create({
+    body: messageBody,
+    from: process.env.TWILIO_PHONE_NUMBER,
+    to: recipientPhoneNumber
+  })
+  return result;
 }
